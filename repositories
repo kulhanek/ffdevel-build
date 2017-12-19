@@ -6,8 +6,8 @@ src/thirdparty/ranlux/1.0 ranlux
 src/thirdparty/lbfgs/1.0 lbfgs
 src/thirdparty/nlopt/2.3.0 nlopt
 src/thirdparty/netcdfcore/4.0.1 netcdfcore
-src/thirdparty/boost/1.59.0 boost
-src/thirdparty/obcore/2.3.1 obcore
+src/thirdparty/boost/1.65.1 boost
+src/thirdparty/obcore/2.4.0 obcore
 # main code
 src/projects/hipoly/1.0 hipoly
 src/projects/scimafic/1.0 scimafic
