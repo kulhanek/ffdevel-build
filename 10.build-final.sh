@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SITES="pbspro"
-PREFIX="core"
+SITES="clusters"
+PREFIX="common"
 
 if [[ ! ( ( "`hostname -f`" == "deb8.ncbr.muni.cz" ) || ( "`hostname -f`" == *"salomon"* ) )  ]]; then
     echo "unsupported build machine!"
@@ -34,12 +34,12 @@ fi
 # ------------------------------------------------------------------------------
 # update revision number
 _PWD=$PWD
-if ! [ -d src/projects/abs/3.0 ]; then
-    echo "src/projects/abs/3.0 - not found"
+if ! [ -d src/projects/ffdevel/1.0 ]; then
+    echo "src/projects/ffdevel/1.0 - not found"
     exit 1
 fi
 
-cd src/projects/abs/3.0
+cd src/projects/ffdevel/1.0
 ./UpdateGitVersion activate
 if [ $? -ne 0 ]; then echo "UpdateGitVersion failed"; exit 1; fi
 VERS="3.`git rev-list --count HEAD`.`git rev-parse --short HEAD`"
@@ -47,7 +47,7 @@ if [ $? -ne 0 ]; then exit 1; fi
 cd $_PWD
 
 # names ------------------------------
-NAME="abs"
+NAME="ffdevel"
 ARCH=`uname -m`
 MODE="single" 
 echo "Build: $NAME:$VERS:$ARCH:$MODE"
@@ -78,15 +78,7 @@ cat > $SOFTBLDS/$NAME:$VERS:$ARCH:$MODE.bld << EOF
     <setup>
         <variable name="AMS_PACKAGE_DIR" value="$PREFIX/$NAME/$VERS/$ARCH/$MODE" operation="set" priority="modaction"/>
         <variable name="PATH" value="\$SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/bin" operation="prepend"/>
-        <variable name="ABS_ROOT" value="\$SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE" operation="set"/>
-        <script   name="\$SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/etc/boot/init.abs" type="inline"/>
     </setup>
-    <deps>
-        <dep name="abs-rsync"               type="sync"/>
-        <dep name="tigervnc"                type="sync"/>
-        <dep name="screen"                  type="sync"/>
-        <dep name="ncbr-personal-libpbspro" type="deb"/>
-    </deps>
 </build>
 EOF
 if [ $? -ne 0 ]; then exit 1; fi
