@@ -17,7 +17,7 @@ if [ -z "$AMS_ROOT" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-module add cmake git
+module add cmake git intelcdk
 
 # determine number of available CPUs if not specified
 if [ -z "$N" ]; then
@@ -49,7 +49,7 @@ cd $_PWD
 # names ------------------------------
 NAME="ffdevel"
 ARCH=`uname -m`
-MODE="single" 
+MODE="node" 
 echo "Build: $NAME:$VERS:$ARCH:$MODE"
 echo ""
 
@@ -62,10 +62,6 @@ if [ $? -ne 0 ]; then exit 1; fi
 
 make -j "$N" install
 if [ $? -ne 0 ]; then exit 1; fi
-
-# make link to global setup
-unlink "$SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/etc/sites" 2> /dev/null
-ln -s "$AMS_ROOT/etc/abs" "$SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/etc/sites"
 
 # prepare build file -----------------
 SOFTBLDS="$AMS_ROOT/etc/map/builds/$PREFIX"
@@ -82,6 +78,11 @@ cat > $SOFTBLDS/$NAME:$VERS:$ARCH:$MODE.bld << EOF
 </build>
 EOF
 if [ $? -ne 0 ]; then exit 1; fi
+
+# deb8
+cp /usr/lib/x86_64-linux-gnu/libboost_serialization.so.1.55.0 $SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/lib
+cp /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.55.0 $SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/lib
+cp /usr/lib/x86_64-linux-gnu/libboost_system.so.1.55.0 $SOFTREPO/$PREFIX/$NAME/$VERS/$ARCH/$MODE/lib
 
 echo ""
 echo "Adding builds ..."
